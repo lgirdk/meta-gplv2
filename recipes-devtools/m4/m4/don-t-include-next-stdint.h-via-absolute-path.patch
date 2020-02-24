@@ -1,0 +1,49 @@
+From 0520a3016b59ddfda7308b6fa270dfd98e89ae60 Mon Sep 17 00:00:00 2001
+From: Andre McCurdy <armccurdy@gmail.com>
+Date: Mon, 24 Feb 2020 20:42:27 +0000
+Subject: [PATCH] don't include next stdint.h via absolute path
+
+There are two ways to wrapper header files:
+
+ - By including the real header from the wrapper using an absolute path
+ - By using #include_next
+
+If a header is wrapped twice, then these two approaches can not be
+mixed (since including via an absolute path resets the header include
+path search, which #include_next relies on to avoid finding the
+wrapper multiple times).
+
+Since the clang toolchain uses a wrapper for stdint.h (which uses the
+more modern #include_next approach) we need to use that approach from
+the stdint.h wrapper provided by m4 too.
+
+Signed-off-by: Andre McCurdy <armccurdy@gmail.com>
+---
+ lib/stdint_.h | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/lib/stdint_.h b/lib/stdint_.h
+index 4fa5251..4973eb9 100644
+--- a/lib/stdint_.h
++++ b/lib/stdint_.h
+@@ -43,7 +43,7 @@
+      Include it before <inttypes.h>, since any "#include <stdint.h>"
+      in <inttypes.h> would reinclude us, skipping our contents because
+      _GL_STDINT_H is defined.  */
+-# include @ABSOLUTE_STDINT_H@
++# include_next <stdint.h>
+ #endif
+ 
+ /* <sys/types.h> defines some of the stdint.h types as well, on glibc,
+@@ -51,7 +51,7 @@
+    AIX 5.2 <sys/types.h> isn't needed and causes troubles.
+    MacOS X 10.4.6 <sys/types.h> includes <stdint.h> (which is us), but
+    relies on the system <stdint.h> definitions, so include
+-   <sys/types.h> after @ABSOLUTE_STDINT_H@.  */
++   <sys/types.h> after <stdint.h>.  */
+ #if @HAVE_SYS_TYPES_H@ && ! defined _AIX
+ # include <sys/types.h>
+ #endif
+-- 
+2.24.0
+
