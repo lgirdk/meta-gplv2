@@ -24,6 +24,4 @@ inherit autotools texinfo
 
 EXTRA_OEMAKE += "'infodir=${infodir}'"
 
-LDFLAGS_prepend_libc-uclibc = " -lrt "
-
 BBCLASSEXTEND = "nativesdk"
