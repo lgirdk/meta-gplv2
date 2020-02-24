@@ -10,6 +10,7 @@ PR = "r2"
 
 SRC_URI = "${GNU_MIRROR}/m4/m4-${PV}.tar.gz \
            file://fix_for_circular_dependency.patch \
+           file://don-t-include-next-stdint.h-via-absolute-path.patch \
 "
 
 SRC_URI_append_class-target = "\
