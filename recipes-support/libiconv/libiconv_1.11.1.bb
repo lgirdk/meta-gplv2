@@ -27,6 +27,9 @@ python __anonymous() {
         raise bb.parse.SkipPackage("libiconv is provided for use with uClibc only - glibc already provides iconv")
 }
 
+COMPATIBLE_HOST_libc-musl = "null"
+COMPATIBLE_HOST_libc-glibc = "null"
+
 EXTRA_OECONF += "--enable-shared --enable-static --enable-relocatable"
 
 LEAD_SONAME = "libiconv.so"
